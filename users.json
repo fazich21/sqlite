@@ -1,0 +1,12 @@
+[
+    {
+        "username": "faizan",
+        "password": "$2b$12$mYlFINU8Ncu6TO4WATO.3.IrHST2y1PHrWq70RH7K9phr.Zls.Vlu",
+        "role": "admin"
+    },
+    {
+        "username": "sufyan",
+        "password": "$2b$12$MM34n73viSII7taYZu9jCOd91AXxyJW2N35KjVKGiNYrJ2GSANYRW",
+        "role": "user"
+    }
+]

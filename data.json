@@ -108,5 +108,20 @@
         "id": 22,
         "title": "what is Deep Learning",
         "content": "it is a branch if AI in which we have deep Neural networks to understand and build AI models"
+    },
+    {
+        "id": 23,
+        "title": "how to learn German",
+        "content": "Start from A1 and be consistent"
+    },
+    {
+        "id": 24,
+        "title": "Fast api?",
+        "content": "It is used to communicate between frontend and backend"
+    },
+    {
+        "id": 25,
+        "title": "What are different type of functions in Fast Api?",
+        "content": "According to the requirements of the project we have Get,Post,Put,delete methods"
     }
 ]

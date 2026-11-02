@@ -1,10 +1,19 @@
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
 import json
 import os
 
+from auth import get_current_user, require_admin, router as auth_router
+
 app = FastAPI()
+
+# Adds /auth/register, /auth/login and /auth/me
+app.include_router(auth_router)
+
+# Authorization rules for documents:
+#   - Logged-in users (any role) can READ and SEARCH documents.
+#   - Only admins can CREATE, UPDATE and DELETE documents.
 
 FILE_NAME = "data.json"
 
@@ -29,9 +38,9 @@ def save_data(documents):
         json.dump(documents, file, indent=4)
 
 
-# CREATE a new document
+# CREATE a new document (admins only)
 @app.post("/documents")
-def create_document(document: Document):
+def create_document(document: Document, user: dict = Depends(require_admin)):
     documents = read_data()
 
     if documents:
@@ -56,13 +65,13 @@ def create_document(document: Document):
 
 # READ all documents
 @app.get("/documents")
-def get_documents():
+def get_documents(user: dict = Depends(get_current_user)):
     return read_data()
 
 
 # SEARCH documents by title
 @app.get("/documents/search")
-def search_documents(title: str):
+def search_documents(title: str, user: dict = Depends(get_current_user)):
     documents = read_data()
     results = []
 
@@ -80,7 +89,7 @@ def search_documents(title: str):
 
 # READ one document by ID
 @app.get("/documents/{document_id}")
-def get_document(document_id: int):
+def get_document(document_id: int, user: dict = Depends(get_current_user)):
     documents = read_data()
 
     for document in documents:
@@ -93,9 +102,9 @@ def get_document(document_id: int):
     )
 
 
-# UPDATE a document
+# UPDATE a document (admins only)
 @app.put("/documents/{document_id}")
-def update_document(document_id: int, updated_document: Document):
+def update_document(document_id: int, updated_document: Document, user: dict = Depends(require_admin)):
     documents = read_data()
 
     for document in documents:
@@ -116,9 +125,9 @@ def update_document(document_id: int, updated_document: Document):
     )
 
 
-# DELETE a document
+# DELETE a document (admins only)
 @app.delete("/documents/{document_id}")
-def delete_document(document_id: int):
+def delete_document(document_id: int, user: dict = Depends(require_admin)):
     documents = read_data()
 
     for document in documents:
